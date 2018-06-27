@@ -1,0 +1,70 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Drive : MonoBehaviour {
+
+	RCast front;
+	RCast left;
+	RCast right;
+	public Rigidbody2D rb;
+	public float fdist;
+	public float ldist;
+	public float rdist;
+	//public Collider2D collider;
+	public bool colliding;
+	public float speed = 2f;
+
+	// Use this for initialization
+	void Start () {
+		front = new RCast (transform.position, transform.up);
+		left = new RCast (transform.position, -transform.right);
+		right = new RCast (transform.position, transform.right);
+		rb = GetComponent<Rigidbody2D> ();
+		//collider = GetComponent<Collider2D> ();
+		colliding = false;
+		fdist = front.getDist ();
+		ldist = left.getDist ();
+		rdist = right.getDist (); 
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		fdist = front.getDist ();
+		ldist = left.getDist ();
+		rdist = right.getDist ();
+		transform.Translate (Vector2.up * Time.deltaTime * speed);
+		//transform.TransformDirection(Vector3.up * Time.deltaTime);
+		front = new RCast (transform.position, transform.up);
+		left = new RCast (transform.position, -transform.right);
+		right = new RCast (transform.position,  transform.right);
+		front.UDate (transform.position, transform.up);
+		left.UDate (transform.position, -transform.right);
+		right.UDate (transform.position, transform.right); 
+		turn ();
+		adjustSpeed ();
+	}
+
+	void turn() {
+		//if (ldist <= 0) {
+			//transform.Rotate (Vector3.forward * -0.2f * speed);
+		//}
+		//if (rdist <= 0) {
+			//transform.Rotate (Vector3.forward * 0.2f * speed);
+		//}
+	    if (((!(fdist > 8) && ((fdist < 0.6 && ldist < rdist)) || ldist < 0.08))) {
+			transform.Rotate (Vector3.forward * -1 * speed);
+		} if (((!(fdist > 8)) && ((fdist < 0.6 && rdist < ldist) || rdist < 0.08))) {
+			transform.Rotate (Vector3.forward * 1 * speed);
+
+		}
+	}
+
+	void adjustSpeed() {
+		if (fdist < 1 && speed > 0.8) {
+			speed -= 0.05f;
+		} else if (speed < 2) {
+			speed += 0.05f;
+		}
+	}
+}
