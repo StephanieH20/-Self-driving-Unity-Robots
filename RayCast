@@ -1,0 +1,46 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class RCast : MonoBehaviour {
+
+	//public Ray2D ray;
+	public RaycastHit2D hit;
+	//private float range = 200f;
+	public Vector2 direction;
+	public Vector2 origin;
+	public float hitDist; 
+
+	// Use this for initialization
+	public RCast(Vector2 original, Vector2 dir) {
+		direction = dir;
+		original = origin;
+	}
+
+	public float getDist() {
+		return hitDist;
+	}
+
+	void Start () {
+		hitDist = 0f;
+
+	}
+
+	// Update is called once per frame
+	void Update () {
+		
+	}
+
+	public void UDate(Vector2 origin_1, Vector2 direction_1) {
+		hit = Physics2D.Raycast (origin_1, direction_1);
+		Debug.DrawRay (origin_1, direction_1 * (distance(origin_1, hit.point) + 0.8f), Color.red);
+		if (hit.collider != null) { 
+			hitDist = distance (origin_1, hit.point);
+		}
+	}
+
+		
+	float distance(Vector2 a, Vector2 b) {
+		return ((Mathf.Sqrt ((Mathf.Abs (a.x - b.x) * Mathf.Abs (a.x - b.x)) + (Mathf.Abs (a.y - b.y) * Mathf.Abs (a.y - b.y)))) - 0.8f);
+	}
+}
